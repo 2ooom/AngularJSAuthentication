@@ -22,7 +22,7 @@ namespace AngularJSAuthentication.API.Entities
 
         [Required]
         [MaxLength(50)]
-        public string UserAgentId { get; set; }
+        public string SessionId { get; set; }
 
         [Required]
         public DateTime ExpiresUtc { get; set; }

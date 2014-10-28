@@ -6,7 +6,7 @@
         {
             public const string RefreshTokeLifeTime = "AngularJSAuthentication.API.OAuth.RefreshTokeLifetime";
             public const string ClientId = "AngularJSAuthentication.API.OAuth.ClientId";
-            public const string UserAgentId = "AngularJSAuthentication.API.OAuth.UserAgentId";
+            public const string SessionId = "AngularJSAuthentication.API.OAuth.SessionId";
             public const string IsOriginAllowed = "AngularJSAuthentication.API.OAuth.IsOriginAllowed";
         }
     }

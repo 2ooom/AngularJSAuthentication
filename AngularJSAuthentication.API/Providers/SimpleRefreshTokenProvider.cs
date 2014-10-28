@@ -23,7 +23,7 @@ namespace AngularJSAuthentication.API.Providers
 
             var refreshTokenId = Helper.GetUniqueId();
             var refreshTokenLifeTime = context.OwinContext.Get<string>(Constants.OAuth.RefreshTokeLifeTime);
-            var userAgentId = context.OwinContext.Get<string>(Constants.OAuth.UserAgentId);
+            var sessionId = context.OwinContext.Get<string>(Constants.OAuth.SessionId);
 
             var token = new RefreshToken
             {
@@ -32,7 +32,7 @@ namespace AngularJSAuthentication.API.Providers
                 UserName = context.Ticket.Identity.Name,
                 UserAgent = GetUserAgent(context.OwinContext),
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(refreshTokenLifeTime)),
-                UserAgentId = userAgentId,
+                SessionId = sessionId,
             };
 
             using (var _repo = new AuthRepository())
@@ -82,7 +82,7 @@ namespace AngularJSAuthentication.API.Providers
                     // TODO: log suspicious activity
                     return;
                 }
-                context.OwinContext.Set(Constants.OAuth.UserAgentId, refreshToken.UserAgentId);
+                context.OwinContext.Set(Constants.OAuth.SessionId, refreshToken.SessionId);
                 var ticket = AuthenticationTicketProvider.GetTicket(user, OAuthDefaults.AuthenticationType);
                 // workaround for date expiry check in OAuthAuthorizationServerHandler.InvokeTokenEndpointRefreshTokenGrantAsync()
                 // that will raise error if ticket.Properties.ExpiresUtc < currentUtc
@@ -98,7 +98,7 @@ namespace AngularJSAuthentication.API.Providers
         private static void CleanupRefreshTokens(AuthRepository repo, RefreshToken token)
         {
             // deleting previous refrehs tokens for same user-agents
-            var previousTokens = repo.FindRefreshTokens(token.ClientId, token.UserName, token.UserAgentId).ToArray();
+            var previousTokens = repo.FindRefreshTokens(token.ClientId, token.UserName, token.SessionId).ToArray();
             repo.RemoveRefreshToken(previousTokens);
 
             // deliting expired tokens for the current user

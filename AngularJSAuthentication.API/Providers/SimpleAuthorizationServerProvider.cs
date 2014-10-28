@@ -76,7 +76,7 @@ namespace AngularJSAuthentication.API.Providers
             }
             else
             {
-                context.OwinContext.Set(Constants.OAuth.UserAgentId, Helper.GetUniqueId());
+                context.OwinContext.Set(Constants.OAuth.SessionId, Helper.GetUniqueId());
                 var ticket = AuthenticationTicketProvider.GetTicket(user, OAuthDefaults.AuthenticationType);
                 context.Validated(ticket);
             }

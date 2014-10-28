@@ -93,15 +93,15 @@ namespace AngularJSAuthentication.API
         }
 
         public IQueryable<RefreshToken> FindRefreshTokens(string clientId, string userName,
-            string userAgentId,
+            string sessionId,
             DateTime? maxExpiresUtc = null)
         {
             var query = _ctx.RefreshTokens.AsQueryable()
                 .Where(t => t.UserName == userName && t.ClientId == clientId);
 
-            if (userAgentId != null)
+            if (sessionId != null)
             {
-                query = query.Where(t => t.UserAgentId == userAgentId);
+                query = query.Where(t => t.SessionId == sessionId);
             }
             if (maxExpiresUtc.HasValue)
             {
